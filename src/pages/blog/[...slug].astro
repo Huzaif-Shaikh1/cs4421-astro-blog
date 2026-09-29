@@ -16,6 +16,6 @@ const { Content } = await render(post);
 const author = await getEntry('authors', post.data.author);
 ---
 
-<BlogPost {...post.data} author={author.data}>
+<BlogPost {...post.data} author={author?.data}>
 	<Content />
 </BlogPost>

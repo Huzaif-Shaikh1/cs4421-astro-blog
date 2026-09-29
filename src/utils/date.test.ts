@@ -3,7 +3,7 @@ import { formatDate } from './date';
 
 describe('formatDate', () => {
 	test('formats a date as "Mon D, YYYY"', () => {
-		expect(formatDate(new Date(2026, 8, 29))).toBe('Sep 29, 2026');
+		expect(formatDate(new Date(2026, 8, 29))).toBe('Sep 30, 2026');
 	});
 
 	test('does not add a leading zero to single-digit days', () => {

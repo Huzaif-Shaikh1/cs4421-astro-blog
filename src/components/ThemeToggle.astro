@@ -1,0 +1,38 @@
+<button id="theme-toggle" type="button" aria-label="Switch between light and dark mode">
+	<span class="show-in-light" aria-hidden="true">🌙</span>
+	<span class="show-in-dark" aria-hidden="true">☀️</span>
+</button>
+
+<script>
+	const button = document.getElementById('theme-toggle');
+	button?.addEventListener('click', () => {
+		const root = document.documentElement;
+		const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+		root.dataset.theme = next;
+		try {
+			localStorage.setItem('theme', next);
+		} catch {
+			// Storage blocked: the theme still changes for this page
+		}
+	});
+</script>
+
+<style>
+	button {
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 1.25em;
+		line-height: 1;
+		padding: 0.25em;
+	}
+	.show-in-dark {
+		display: none;
+	}
+	:global(:root[data-theme='dark']) .show-in-light {
+		display: none;
+	}
+	:global(:root[data-theme='dark']) .show-in-dark {
+		display: inline;
+	}
+</style>

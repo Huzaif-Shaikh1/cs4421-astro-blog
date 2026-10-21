@@ -15,6 +15,21 @@
 	--box-shadow:
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
 		0 16px 32px rgba(var(--gray), 33%);
+	--page-bg: #fff;
+	--header-bg: #fff;
+	color-scheme: light;
+}
+:root[data-theme='dark'] {
+	--accent: #8b9bff;
+	--accent-dark: #c3cbff;
+	--black: 236, 239, 245;
+	--gray: 148, 160, 188;
+	--gray-light: 45, 52, 68;
+	--gray-dark: 205, 211, 224;
+	--gray-gradient: rgba(30, 36, 50, 100%), #11141b;
+	--page-bg: #11141b;
+	--header-bg: #161a23;
+	color-scheme: dark;
 }
 body {
 	font-family: var(--font-atkinson);
@@ -22,6 +37,7 @@ body {
 	padding: 0;
 	text-align: left;
 	background: linear-gradient(var(--gray-gradient)) no-repeat;
+	background-color: var(--page-bg);
 	background-size: 100% 600px;
 	word-wrap: break-word;
 	overflow-wrap: break-word;
@@ -29,7 +45,7 @@ body {
 	font-size: 20px;
 	line-height: 1.7;
 }
-main {
+	main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
@@ -139,3 +155,4 @@ hr {
 	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
 }
+

@@ -28,3 +28,35 @@ jobs:
 
       - name: Unit tests
         run: npm run test:unit
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t astro-blog:ci .
+
+      - name: Run container
+        run: docker run -d -p 4321:4321 -e NODE_ENV=production --name my-blog astro-blog:ci
+
+      - name: Wait for HEALTHCHECK to report healthy
+        run: |
+          for i in $(seq 1 30); do
+            status=$(docker inspect --format='{{.State.Health.Status}}' my-blog)
+            echo "Attempt $i: health status is $status"
+            if [ "$status" = "healthy" ]; then exit 0; fi
+            sleep 3
+          done
+          echo "Container never became healthy"
+          exit 1
+
+      - name: Test /api/health from outside the container
+        run: curl -fsS http://localhost:4321/api/health
+
+      - name: Show container status and logs
+        if: always()
+        run: |
+          docker ps -a
+          docker logs my-blog

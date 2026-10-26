@@ -1,0 +1,11 @@
+node_modules
+dist
+.astro
+cdk
+docs
+.github
+.vscode
+.git
+.env
+.env.*
+*.log

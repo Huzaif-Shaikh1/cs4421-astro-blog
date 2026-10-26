@@ -43,4 +43,4 @@ jobs:
 
       - name: Deploy infrastructure and site with AWS CDK
         working-directory: cdk
-        run: npx cdk deploy --require-approval never
+        run: npx cdk deploy StaticSiteStack --require-approval never

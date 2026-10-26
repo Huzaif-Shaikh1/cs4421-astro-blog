@@ -5,10 +5,21 @@ on:
     branches: [main]
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Rollback: an existing ECR image tag to deploy (leave empty to build a new image)'
+        required: false
+        default: ''
+
+concurrency:
+  group: deploy-container
+  cancel-in-progress: false
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      ROLLBACK_TAG: ${{ github.event.inputs.image_tag }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -44,10 +55,12 @@ jobs:
         run: npx cdk deploy ContainerRegistryStack --require-approval never
 
       - name: Log in to Amazon ECR
+        if: env.ROLLBACK_TAG == ''
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag and push image
+        if: env.ROLLBACK_TAG == ''
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
@@ -58,3 +71,10 @@ jobs:
             docker tag $ECR_REGISTRY/astro-blog:$IMAGE_TAG $ECR_REGISTRY/astro-blog:${{ github.ref_name }}
             docker push $ECR_REGISTRY/astro-blog:${{ github.ref_name }}
           fi
+
+      - name: Deploy to Amazon ECS
+        working-directory: cdk
+        run: |
+          TAG="${ROLLBACK_TAG:-$GITHUB_SHA}"
+          echo "Deploying image tag: $TAG"
+          npx cdk deploy ContainerServiceStack -c imageTag=$TAG --require-approval never

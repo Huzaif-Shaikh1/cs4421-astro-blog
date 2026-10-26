@@ -22,10 +22,11 @@ jobs:
             package-lock.json
             cdk/package-lock.json
 
-      - name: Install dependencies and run unit tests
+      - name: Install dependencies, run unit tests and build the site
         run: |
           npm ci
           npm run test:unit
+          npm run build
 
       - name: Install CDK dependencies
         working-directory: cdk

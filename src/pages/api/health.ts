@@ -7,12 +7,12 @@ export const prerender = false;
 export const GET: APIRoute = () => {
 	return new Response(
 		JSON.stringify({
-			status: 'error',
+			status: 'ok',
 			uptime: process.uptime(),
 			timestamp: new Date().toISOString(),
 		}),
 		{
-			status: 500,
+			status: 200,
 			headers: { 'Content-Type': 'application/json' },
 		},
 	);
